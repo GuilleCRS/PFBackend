@@ -12,6 +12,7 @@ rutas.get('/factura',(req, res)=>{
             res.json(filas);
         }else{
             console.log(err);
+            res.status(500).json(err)
         }
     });
 });
@@ -25,6 +26,20 @@ rutas.get('/factura/:id',(req, res)=> {
             res.json(filas);
         }else{
             console.log(err);
+            res.status(500).json(err)
+        }
+    })
+})
+
+//Hacer select de factura por id de cliente
+rutas.get('/facturaRFC/:id',(req, res)=> {
+    const id_RFC= req.params.id;
+    mysqlConexion.query('SELECT * FROM factura WHERE id_RFC= ?',[id_RFC],(err,filas,campos)=>{
+        if(!err){
+            res.json(filas);
+        }else{
+            console.log(err);
+            res.status(500).json(err)
         }
     })
 })
@@ -38,6 +53,7 @@ rutas.post('/factura',(req,res)=>{
             res.json({estatus: 'Factura guardada'});
         }else{
             console.log(err)
+            res.status(500).json(err)
         }
     })
 })
@@ -49,15 +65,16 @@ rutas.put('/factura/:id',(req, res)=>{
     const query = "UPDATE factura SET Total = ?, Fecha_Hora = ? , id_RFC = ? WHERE id_Factura = ?";
     mysqlConexion.query(query,[Total,Fecha_Hora,id_RFC,id],(err,filas,campos) => {
         if(!err){
-            res.json({estatus: "Factura Actualizada"});
+            res.json({estatus: "Factura Actualizada",filas,campos});
         }else{
             console.log(err);
+            res.status(500).json(err)
         }
     })
 
 });
 
-//Borrar una factura
+//Borrar una factura por id de factura
 rutas.delete('/factura/:id',(req,res)=>{
     const {id} =req.params;
     const query = "DELETE FROM factura WHERE id_Factura = ?";
@@ -66,9 +83,24 @@ rutas.delete('/factura/:id',(req,res)=>{
             res.json({estatus: 'Factura eliminada'});
         }else{
             console.log(err);
+            res.status(500).json(err)
         }
     })
 })
+//Borrar factura por id de cliente
+rutas.delete('/facturaRFC/:id',(req,res)=>{
+    const {id} =req.params;
+    const query = "DELETE FROM factura WHERE id_RFC = ?";
+    mysqlConexion.query(query,[id],(err,filas,campos) => {
+        if(!err){
+            res.json({estatus: 'Factura eliminada'});
+        }else{
+            console.log(err);
+            res.status(500).json(err)
+        }
+    })
+})
+
 
 
 module.exports = rutas;

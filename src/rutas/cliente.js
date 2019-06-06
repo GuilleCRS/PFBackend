@@ -12,6 +12,7 @@ rutas.get('/cliente',(req, res)=>{
             res.json(filas);
         }else{
             console.log(err);
+            res.status(500).json(err)
         }
     });
 });
@@ -25,6 +26,7 @@ rutas.get('/cliente/:id',(req, res)=> {
             res.json(filas);
         }else{
             console.log(err);
+            res.status(500).json(err)
         }
     })
 })
@@ -36,7 +38,7 @@ rutas.post('/cliente',(req,res)=>{
         if(!err){
             res.json({estatus: 'Cliente guardado'});
         }else{
-            console.log(err)
+            res.status(500).json(err)
         }
     })
 })
@@ -48,9 +50,10 @@ rutas.put('/cliente/:id',(req, res)=>{
     const query = "UPDATE cliente SET Nom_Cliente = ?, Ap_Cliente = ? WHERE id_RFC = ?";
     mysqlConexion.query(query,[Nom_Cliente,Ap_Cliente,id],(err,filas,campos) => {
         if(!err){
-            res.json({estatus: "Cliente actualizado"});
+            res.json({estatus: "Cliente actualizado",filas,campos});
         }else{
             console.log(err);
+            res.status(500).json(err)
         }
     })
 
@@ -65,6 +68,7 @@ rutas.delete('/cliente/:id',(req,res)=>{
             res.json({estatus: 'Cliente borrado'});
         }else{
             console.log(err);
+            res.status(500).json(err)
         }
     })
 })

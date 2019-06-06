@@ -11,6 +11,7 @@ rutas.get('/orden',(req, res)=>{
             res.json(filas);
         }else{
             console.log(err);
+            res.status(500).json(err)
         }
     });
 });
@@ -24,17 +25,19 @@ rutas.get('/orden/:id_ord',(req, res)=> {
             res.json(filas);
         }else{
             console.log(err);
+            res.status(500).json(err)
         }
     })
 })
 //Select y desplegar elementos de la tabla buscando por cliente
-rutas.get('/orden_rfc/:id_rfc',(req, res)=> {
+rutas.get('/ordenrfc/:id_rfc',(req, res)=> {
     const id_RFC = req.params.id_rfc;
     mysqlConexion.query('SELECT * FROM order_detalles_menu WHERE id_RFC= ?',[id_RFC],(err,filas,campos)=>{
         if(!err){
             res.json(filas);
         }else{
             console.log(err);
+            res.status(500).json(err)
         }
     })
 })
@@ -48,6 +51,7 @@ rutas.post('/orden',(req,res)=>{
             res.json({estatus: 'Orden creada con exito'});
         }else{
             console.log(err)
+            res.status(500).json(err)
         }
     })
 })
@@ -59,9 +63,10 @@ rutas.put('/orden/:id',(req, res)=>{
     const query = "UPDATE order_detalles_menu SET id_Item = ?, Cantidad = ? , id_RFC = ? WHERE id_Order = ? ";
     mysqlConexion.query(query,[id_Item,Cantidad,id_RFC,id],(err,filas,campos) => {
         if(!err){
-            res.json({estatus: "Orden Actualizada cone exito"});
+            res.json({estatus: "Orden Actualizada cone exito"},filas,campos);
         }else{
             console.log(err);
+            res.status(500).json(err)
         }
     })
 
@@ -76,6 +81,20 @@ rutas.delete('/orden/:id_ord',(req,res)=>{
             res.json({estatus: 'Orden eliminada con exito'});
         }else{
             console.log(err);
+            res.status(500).json(err)
+        }
+    })
+})
+//Eliminar una orden por id_rfc de cliente
+rutas.delete('/ordenrfc/:id_ord',(req,res)=>{
+    const {id_ord} =req.params;
+    const query = "DELETE FROM order_detalles_menu WHERE id_RFC = ?";
+    mysqlConexion.query(query,[id_ord],(err,filas,campos) => {
+        if(!err){
+            res.json({estatus: 'Orden eliminada con exito'});
+        }else{
+            console.log(err);
+            res.status(500).json(err)
         }
     })
 })

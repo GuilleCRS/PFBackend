@@ -13,6 +13,7 @@ rutas.get('/menu',(req, res)=>{
             res.json(filas);
         }else{
             console.log(err);
+            res.status(500).json(err)
         }
     });
 });
@@ -26,6 +27,7 @@ rutas.get('/menu/:id',(req, res)=> {
             res.json(filas);
         }else{
             console.log(err);
+            res.status(500).json(err)
         }
     })
 })
@@ -37,6 +39,7 @@ rutas.get('/menu_be',(req, res)=> {
             res.json(filas);
         }else{
             console.log(err);
+            res.status(500).json(err)
         }
     })
 })
@@ -48,6 +51,7 @@ rutas.get('/menu_pl',(req, res)=> {
             res.json(filas);
         }else{
             console.log(err);
+            res.status(500).json(err)
         }
     })
 })
@@ -61,6 +65,7 @@ rutas.post('/menu',(req,res)=>{
             res.json({estatus: 'Item insertado en menu'});
         }else{
             console.log(err)
+            res.status(500).json(err)
         }
     })
 })
@@ -72,9 +77,10 @@ rutas.put('/menu/:id',(req, res)=>{
     const query = "UPDATE menu SET Tipo_Item = ?,Desc_Item = ?,Precio_Item = ? WHERE id_Item = ?";
     mysqlConexion.query(query,[Tipo_Item,Desc_Item,Precio_Item,id],(err,filas,campos) => {
         if(!err){
-            res.json({estatus: "Item del menu actualizado"});
+            res.json({estatus: "Item del menu actualizado",filas,campos});
         }else{
             console.log(err);
+            res.status(500).json(err)
         }
     })
 
@@ -89,6 +95,7 @@ rutas.delete('/menu/:id',(req,res)=>{
             res.json({estatus: 'Item del menu eliminado'});
         }else{
             console.log(err);
+            res.status(500).json(err)
         }
     })
 })
