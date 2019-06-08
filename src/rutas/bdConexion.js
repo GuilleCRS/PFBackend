@@ -1,21 +1,26 @@
 const mysql = require('mysql');
-const mysqlConexion = mysql.createConnection({
+var connectionString =
+  'mysql://*root:*password@*localhost/*database?charset=utf8_general_ci&timezone=-0700';
+
+const mysqlConexion = mysql.createConnection(
+  {
     host: 'localhost',
     user: 'root',
-    password: '',
-    database: 'mydb'   
-},'single');
+    password: 'my-pw',
+    database: 'mydb',
+    insecureAuth: true,
+  },
 
-mysqlConexion.connect(function(err){
+  'single',
+);
 
-
-    if(err){
-        console.log(err);
-        return;
-    }else{
-        console.log('Base de datos conectada');
-    }
+mysqlConexion.connect(function(err) {
+  if (err) {
+    console.log(err);
+    return;
+  } else {
+    console.log('Base de datos conectada');
+  }
 });
-
 
 module.exports = mysqlConexion;
